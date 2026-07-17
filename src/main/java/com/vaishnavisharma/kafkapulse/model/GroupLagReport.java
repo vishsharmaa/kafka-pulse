@@ -66,4 +66,10 @@ public final class GroupLagReport {
     public List<PartitionLag> partitions() {
         return partitions;
     }
+
+    @Override
+    public String toString() {
+        return String.format("GroupLagReport{groupId='%s', health=%s, totalLag=%d, maxPartitionLag=%d, partitions=%d, timestamp=%s}",
+                groupId, health(), totalLag(), maxPartitionLag(), partitions.size(), timestamp);
+    }
 }
