@@ -1,6 +1,31 @@
+# Build output
 target/
 *.class
+*.jar
+*.war
+
+# IDE files
 .idea/
 *.iml
 .vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+*~
+
+# Maven
 dependency-reduced-pom.xml
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
