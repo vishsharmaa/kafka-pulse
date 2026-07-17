@@ -38,6 +38,18 @@ public final class MetricsServer implements AutoCloseable {
                 out.write(body);
             }
         });
+        server.createContext("/ready", exchange -> {
+            boolean ready = !monitor.latestReports().isEmpty();
+            int status = ready ? 200 : 503;
+            byte[] body = (ready
+                    ? "{\"status\":\"ready\"}"
+                    : "{\"status\":\"not_ready\"}").getBytes(StandardCharsets.UTF_8);
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            exchange.sendResponseHeaders(status, body.length);
+            try (OutputStream out = exchange.getResponseBody()) {
+                out.write(body);
+            }
+        });
         server.start();
     }
 
