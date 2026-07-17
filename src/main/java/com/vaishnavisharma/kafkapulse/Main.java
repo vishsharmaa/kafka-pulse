@@ -33,14 +33,22 @@ public final class Main {
             case "monitor":
                 long warn = intEnv("WARN_LAG", 100);
                 long critical = intEnv("CRITICAL_LAG", 1000);
+                Thread mainThread = Thread.currentThread();
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    System.out.println("\nShutting down KafkaPulse...");
+                    mainThread.interrupt();
+                }));
                 try (LagMonitor monitor = new LagMonitor(bootstrap, warn, critical);
                      MetricsServer ignored = new MetricsServer(intEnv("METRICS_PORT", 8080), monitor)) {
                     System.out.println("Metrics at http://localhost:" + intEnv("METRICS_PORT", 8080) + "/metrics");
                     monitor.run(Duration.ofSeconds(5));
                 }
                 break;
+            case "version":
+                System.out.println("KafkaPulse v1.0.0");
+                break;
             default:
-                System.err.println("Usage: java -jar kafka-pulse.jar [produce|consume|monitor]");
+                System.err.println("Usage: java -jar kafka-pulse.jar [produce|consume|monitor|version]");
                 System.exit(2);
         }
     }
